@@ -11,12 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 public class UserController {
     @Autowired
     private UserService userService;
 
+    private static Logger logger = Logger.getLogger(UserController.class.getName());
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> readAll() {
@@ -34,6 +36,7 @@ public class UserController {
             throw new ApiRequestException("User is null");
         }
         userService.create(user);
+        logger.info("Create user");
         return new ResponseEntity<Long>(user.getId(), HttpStatus.CREATED);
     }
 
@@ -46,6 +49,7 @@ public class UserController {
         if (user == null) {
             throw new UserNotFoundRequestException("Not found user");
         }
+        logger.info("Read user");
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
@@ -55,6 +59,7 @@ public class UserController {
             throw new ApiRequestException("User or id is null");
         }
         this.userService.update(user, id);
+        logger.info("Update user");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -64,6 +69,7 @@ public class UserController {
             throw new ApiRequestException("Id is null");
         }
         this.userService.delete(id);
+        logger.info("Delete user");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -74,7 +80,7 @@ public class UserController {
             throw new ApiRequestException("userId  or status is null");
         }
         this.userService.updateStatus(userId, status);
-
+        logger.info("Update user status");
         return new ResponseEntity<>(userId + " " +
                 this.userService.read(userId).getCurrentStatus() + " " +
                 this.userService.read(userId).getLastStatus(), HttpStatus.OK);
