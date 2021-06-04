@@ -80,7 +80,7 @@ public class UserController {
             throw new ApiRequestException("userId  or status is null");
         }
         this.userService.updateStatus(userId, status);
-
+        logger.info("Update user status");
         return new ResponseEntity<>(userId + " " +
                 this.userService.read(userId).getCurrentStatus() + " " +
                 this.userService.read(userId).getLastStatus(), HttpStatus.OK);
